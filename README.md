@@ -123,7 +123,7 @@ We're parsing values as:
 // Same applies for output!
 ```
 
-Check out `src/api/ens.ts` for type-safe contract execution example.
+Check out [`src/api/ens.ts`](./src/api/ens.ts) for type-safe contract execution example.
 
 ## License
 
