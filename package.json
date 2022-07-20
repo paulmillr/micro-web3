@@ -1,0 +1,58 @@
+{
+  "name": "micro-web3",
+  "version": "0.1.0",
+  "description": "Typesafe Web3 with minimum deps: call eth contracts directly from JS. Batteries included",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "index.d.ts.map",
+    "index.ts",
+    "api/*.js",
+    "api/*.d.ts",
+    "api/*.d.ts.map",
+    "contracts/*.js",
+    "contracts/*.d.ts",
+    "contracts/*.d.ts.map",
+    "src/*.ts"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "@noble/hashes": "~1.1.1",
+    "@scure/base": "~1.1.0",
+    "micro-packed": "~0.2.0"
+  },
+  "devDependencies": {
+    "micro-should": "0.2.0",
+    "prettier": "2.6.2",
+    "typescript": "4.7.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "prettier --check src",
+    "test": "node test/index.js"
+  },
+  "author": "Paul Miller (https://paulmillr.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/paulmillr/micro-web3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulmillr/micro-web3.git"
+  },
+  "keywords": [
+    "web3",
+    "abi",
+    "eth",
+    "ethereum",
+    "ERC20",
+    "ERC721"
+  ],
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://paulmillr.com/funding/"
+    }
+  ]
+}
