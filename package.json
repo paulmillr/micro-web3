@@ -47,7 +47,8 @@
     "eth",
     "ethereum",
     "ERC20",
-    "ERC721"
+    "ERC721",
+    "contract"
   ],
   "funding": [
     {
