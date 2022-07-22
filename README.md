@@ -9,12 +9,7 @@ Typesafe Web3 with minimum deps: call eth contracts directly from JS. Batteries 
 - No network code in main package: allows simpler audits and offline usage
 - Tiny, thanks to generic serializer: [micro-packed](https://github.com/paulmillr/micro-packed)
 
-Check out all web3 utility libraries:
-
-- [micro-eth-signer](https://github.com/paulmillr/micro-eth-signer)
-- [micro-sol-signer](https://github.com/paulmillr/micro-sol-signer)
-- [micro-web3](https://github.com/paulmillr/micro-web3)
-- [tx-tor-broadcaster](https://github.com/paulmillr/tx-tor-broadcaster)
+*Check out all web3 utility libraries:* [micro-eth-signer](https://github.com/paulmillr/micro-eth-signer), [micro-sol-signer](https://github.com/paulmillr/micro-sol-signer), [micro-web3](https://github.com/paulmillr/micro-web3), [tx-tor-broadcaster](https://github.com/paulmillr/tx-tor-broadcaster)
 
 ## Usage
 
