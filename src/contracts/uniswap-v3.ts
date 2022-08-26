@@ -1,6 +1,7 @@
 import * as abi from '../index.js';
 import { addHints, addHook } from './common.js';
 import { hex } from '@scure/base';
+import * as P from 'micro-packed';
 
 // prettier-ignore
 const ABI = [
@@ -30,7 +31,7 @@ function uniToken(contract: string, amount: bigint, opt: abi.HintOpt): string | 
   if (!contract || !opt.contracts || !opt.contracts[contract]) return;
   const info = opt.contracts[contract];
   if (!info.decimals || !info.symbol) return;
-  return `${abi.formatDecimal(amount, info.decimals)} ${info.symbol}`;
+  return `${P.coders.decimal(info.decimals).encode(amount)} ${info.symbol}`;
 }
 const uniTs = (ts: number) => `Expires at ${new Date(Number(ts) * 1000).toUTCString()}`;
 

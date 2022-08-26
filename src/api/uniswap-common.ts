@@ -1,6 +1,7 @@
 import * as abi from '../index.js';
 import * as abiDefault from '../contracts/index.js';
 import { hex } from '@scure/base';
+import * as P from 'micro-packed';
 
 export type SwapOpt = { slippagePercent: number; ttl: number };
 export const DEFAULT_SWAP_OPT: SwapOpt = { slippagePercent: 0.5, ttl: 30 * 60 };
@@ -139,10 +140,12 @@ export abstract class UniswapAbstract {
     const fromContract = fromInfo.contract.toLowerCase();
     const toContract = toInfo.contract.toLowerCase();
     if (!fromContract || !toContract) return;
-    const inputAmount = abi.parseDecimal(amount, fromInfo.decimals);
+    const fromDecimal = P.coders.decimal(fromInfo.decimals);
+    const toDecimal = P.coders.decimal(toInfo.decimals);
+    const inputAmount = fromDecimal.decode(amount);
     try {
       const path = await this.bestPath(fromContract, toContract, inputAmount);
-      const expectedAmount = abi.formatDecimal(path.amountOut as bigint, toInfo.decimals);
+      const expectedAmount = toDecimal.encode(path.amountOut as bigint);
       return {
         name: this.name,
         expectedAmount,
@@ -157,14 +160,14 @@ export abstract class UniswapAbstract {
             opt
           );
           return {
-            amount: abi.formatDecimal(txUni.value, 18),
+            amount: abi.Decimal.encode(txUni.value),
             address: txUni.to,
             expectedAmount,
             data: abi.add0x(hex.encode(txUni.data)),
             allowance: txUni.allowance && {
               token: txUni.allowance.token,
               contract: this.contract,
-              amount: abi.formatDecimal(txUni.allowance.amount, fromInfo.decimals),
+              amount: fromDecimal.encode(txUni.allowance.amount),
             },
           };
         },

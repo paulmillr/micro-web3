@@ -1,5 +1,6 @@
 import * as abi from '../index.js';
 import { addHints } from './common.js';
+import * as P from 'micro-packed';
 
 // prettier-ignore
 const ABI = [
@@ -16,7 +17,7 @@ function uniToken(
   if (!contract || !opt.contracts || !opt.contracts[contract]) return;
   const info = opt.contracts[contract];
   if (!info.decimals || !info.symbol) return;
-  return `${abi.formatDecimal(amount, info.decimals)} ${info.symbol}`;
+  return `${P.coders.decimal(info.decimals).encode(amount)} ${info.symbol}`;
 }
 const uniTs = (ts: number) => `Expires at ${new Date(Number(ts) * 1000).toUTCString()}`;
 
@@ -24,7 +25,7 @@ const hints = {
   swapETHForExactTokens(v: any, opt: abi.HintOpt) {
     const last = uniToken(v.path, opt, v.amountOut, false);
     if (!opt.amount || !last) throw new Error('Not enough info');
-    return `Swap up to ${abi.formatDecimal(opt.amount, 18)} ETH for exact ${last}. ${uniTs(
+    return `Swap up to ${abi.Decimal.encode(opt.amount)} ETH for exact ${last}. ${uniTs(
       v.deadline
     )}`;
   },
@@ -32,23 +33,19 @@ const hints = {
   swapExactETHForTokens(v: any, opt: abi.HintOpt) {
     const last = uniToken(v.path, opt, v.amountOutMin, false);
     if (!opt.amount || !last) throw new Error('Not enough info');
-    return `Swap ${abi.formatDecimal(opt.amount, 18)} ETH for at least ${last}. ${uniTs(
-      v.deadline
-    )}`;
+    return `Swap ${abi.Decimal.encode(opt.amount)} ETH for at least ${last}. ${uniTs(v.deadline)}`;
   },
 
   swapExactETHForTokensSupportingFeeOnTransferTokens(v: any, opt: abi.HintOpt) {
     const last = uniToken(v.path, opt, v.amountOutMin, false);
     if (!opt.amount || !last) throw new Error('Not enough info');
-    return `Swap ${abi.formatDecimal(opt.amount, 18)} ETH for at least ${last}. ${uniTs(
-      v.deadline
-    )}`;
+    return `Swap ${abi.Decimal.encode(opt.amount)} ETH for at least ${last}. ${uniTs(v.deadline)}`;
   },
 
   swapExactTokensForETH(v: any, opt: abi.HintOpt) {
     const first = uniToken(v.path, opt, v.amountIn, true);
     if (!first) throw new Error('Not enough info');
-    return `Swap exact ${first} for at least ${abi.formatDecimal(v.amountOutMin, 18)} ETH. ${uniTs(
+    return `Swap exact ${first} for at least ${abi.Decimal.encode(v.amountOutMin)} ETH. ${uniTs(
       v.deadline
     )}`;
   },
@@ -56,7 +53,7 @@ const hints = {
   swapExactTokensForETHSupportingFeeOnTransferTokens(v: any, opt: abi.HintOpt) {
     const first = uniToken(v.path, opt, v.amountIn, true);
     if (!first) throw new Error('Not enough info');
-    return `Swap exact ${first} for at least ${abi.formatDecimal(v.amountOutMin, 18)} ETH. ${uniTs(
+    return `Swap exact ${first} for at least ${abi.Decimal.encode(v.amountOutMin)} ETH. ${uniTs(
       v.deadline
     )}`;
   },
@@ -64,7 +61,7 @@ const hints = {
   swapTokensForExactETH(v: any, opt: abi.HintOpt) {
     const first = uniToken(v.path, opt, v.amountInMax, true);
     if (!first) throw new Error('Not enough info');
-    return `Swap up to ${first} for exact ${abi.formatDecimal(v.amountOut, 18)} ETH. ${uniTs(
+    return `Swap up to ${first} for exact ${abi.Decimal.encode(v.amountOut)} ETH. ${uniTs(
       v.deadline
     )}`;
   },

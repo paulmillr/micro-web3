@@ -3,6 +3,7 @@ import * as contracts from '../contracts/index.js';
 import { keccak_256 } from '@noble/hashes/sha3';
 import { hex } from '@scure/base';
 import * as uni from './uniswap-common.js';
+import * as P from 'micro-packed';
 
 export const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
 export const INIT_CODE_HASH = hex.decode(
@@ -22,15 +23,13 @@ const PAIR_CONTRACT = [
 
 export function create2(from: Uint8Array, salt: Uint8Array, initCodeHash: Uint8Array) {
   return abi.add0x(
-    hex.encode(
-      keccak_256(abi.concatBytes(new Uint8Array([255]), from, salt, initCodeHash)).slice(12)
-    )
+    hex.encode(keccak_256(P.concatBytes(new Uint8Array([255]), from, salt, initCodeHash)).slice(12))
   );
 }
 
 export function pairAddress(a: string, b: string, factory: string = FACTORY_ADDRESS) {
   // This is completely broken: '0x11' '0x11' will return '0x1111'. But this is how it works in sdk.
-  const data = abi.concatBytes(...uni.sortTokens(a, b).map((i) => hex.decode(abi.strip0x(i))));
+  const data = P.concatBytes(...uni.sortTokens(a, b).map((i) => hex.decode(abi.strip0x(i))));
   return create2(hex.decode(abi.strip0x(factory)), keccak_256(data), INIT_CODE_HASH);
 }
 

@@ -4,6 +4,7 @@ import { hex } from '@scure/base';
 import * as uniswap from '../api/uniswap-v2.js';
 import * as uniswap3 from '../api/uniswap-v3.js';
 import * as abi from '../index.js';
+import * as P from 'micro-packed';
 
 const vitalik = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045';
 const TS = 1876543210;
@@ -55,7 +56,7 @@ should('Uniswap: pair', () => {
   );
 });
 should('Uniswap: amount', () => {
-  const dec = (n) => abi.formatDecimal(n, 18);
+  const dec = (n) => abi.Decimal.encode(n);
   const [rA, rB] = [296640198432632702024n, 365918988101684615226n];
   deepStrictEqual(dec(uniswap.amount(rA, rB, 1000000000000000000n)), '1.225724583682887052');
   deepStrictEqual(dec(uniswap.amount(rA, rB, 100000000000000000000n)), '92.047496716230633056');
@@ -190,7 +191,7 @@ should('UniswapV3: txData', () => {
     PRQ,
     'eth',
     {
-      path: abi.concatBytes(
+      path: P.concatBytes(
         hex.decode(abi.strip0x(PRQ)),
         hex.decode('002710'), // HIGH
         hex.decode(abi.strip0x(USDT)),
@@ -215,7 +216,7 @@ should('UniswapV3: txData', () => {
     'eth',
     USDT,
     {
-      path: abi.concatBytes(
+      path: P.concatBytes(
         hex.decode(abi.strip0x(USDT)),
         hex.decode('0001f4'), // LOW
         hex.decode(abi.strip0x(USDC)),

@@ -1,11 +1,13 @@
 import { keccak_256 } from '@noble/hashes/sha3';
 import * as abi from '../index.js';
+import * as P from 'micro-packed';
+
 // No support for IDN names because they are stupid.
 export function namehash(address: string): abi.Bytes {
   let res = new Uint8Array(32);
   if (!address) return res;
   for (let label of address.split('.').reverse())
-    res = keccak_256(abi.concatBytes(res, keccak_256(label)));
+    res = keccak_256(P.concatBytes(res, keccak_256(label)));
   return res;
 }
 

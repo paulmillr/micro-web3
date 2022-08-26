@@ -22,7 +22,7 @@
   "dependencies": {
     "@noble/hashes": "~1.1.1",
     "@scure/base": "~1.1.0",
-    "micro-packed": "~0.2.0"
+    "micro-packed": "~0.3.0"
   },
   "devDependencies": {
     "micro-should": "0.2.0",

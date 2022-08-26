@@ -1,5 +1,6 @@
 import * as abi from '../index.js';
 import { addHints } from './common.js';
+import * as P from 'micro-packed';
 
 // prettier-ignore
 const ABI = [
@@ -14,7 +15,7 @@ const hints = {
         ? { symbol: 'ETH', decimals: 18 }
         : opt.contracts![c];
     const formatToken = (amount: bigint, info: any) =>
-      `${abi.formatDecimal(amount, info.decimals)} ${info.symbol}`;
+      `${P.coders.decimal(info.decimals).encode(amount)} ${info.symbol}`;
     const [srcInfo, destInfo] = [tokenInfo(v.src), tokenInfo(v.dest)];
     if (!srcInfo || !destInfo) throw Error('Not enough info');
     const destAmount =

@@ -1,5 +1,7 @@
 import * as abi from '../index.js';
 import { addHints } from './common.js';
+import * as P from 'micro-packed';
+const decimal = P.coders.decimal;
 
 // prettier-ignore
 const ABI = [
@@ -11,7 +13,7 @@ export const hints = {
   approve(v: any, opt: abi.HintOpt) {
     if (!opt.contractInfo || !opt.contractInfo.decimals || !opt.contractInfo.symbol)
       throw new Error('Not enough info');
-    return `Allow spending ${abi.formatDecimal(v.value, opt.contractInfo.decimals)} ${
+    return `Allow spending ${decimal(opt.contractInfo.decimals).encode(v.value)} ${
       opt.contractInfo.symbol
     } by ${v.spender}`;
   },
@@ -19,7 +21,7 @@ export const hints = {
   transferFrom(v: any, opt: abi.HintOpt) {
     if (!opt.contractInfo || !opt.contractInfo.decimals || !opt.contractInfo.symbol)
       throw new Error('Not enough info');
-    return `Transfer ${abi.formatDecimal(v.value, opt.contractInfo.decimals)} ${
+    return `Transfer ${decimal(opt.contractInfo.decimals).encode(v.value)} ${
       opt.contractInfo.symbol
     } from ${v.from} to ${v.to}`;
   },
@@ -27,22 +29,21 @@ export const hints = {
   transfer(v: any, opt: abi.HintOpt) {
     if (!opt.contractInfo || !opt.contractInfo.decimals || !opt.contractInfo.symbol)
       throw new Error('Not enough info');
-    return `Transfer ${abi.formatDecimal(v.value, opt.contractInfo.decimals)} ${
+    return `Transfer ${decimal(opt.contractInfo.decimals).encode(v.value)} ${
       opt.contractInfo.symbol
     } to ${v.to}`;
   },
   Approval(v: any, opt: abi.HintOpt) {
     if (!opt.contractInfo || !opt.contractInfo.decimals || !opt.contractInfo.symbol)
       throw new Error('Not enough info');
-    return `Allow ${v.spender} spending up to ${abi.formatDecimal(
-      v.value,
-      opt.contractInfo.decimals
+    return `Allow ${v.spender} spending up to ${decimal(opt.contractInfo.decimals).encode(
+      v.value
     )} ${opt.contractInfo.symbol} from ${v.owner}`;
   },
   Transfer(v: any, opt: abi.HintOpt) {
     if (!opt.contractInfo || !opt.contractInfo.decimals || !opt.contractInfo.symbol)
       throw new Error('Not enough info');
-    return `Transfer ${abi.formatDecimal(v.value, opt.contractInfo.decimals)} ${
+    return `Transfer ${decimal(opt.contractInfo.decimals).encode(v.value)} ${
       opt.contractInfo.symbol
     } from ${v.from} to ${v.to}`;
   },

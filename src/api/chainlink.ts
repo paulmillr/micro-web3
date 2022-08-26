@@ -1,5 +1,6 @@
 import * as abi from '../index.js';
 import * as contracts from '../contracts/index.js';
+import * as P from 'micro-packed';
 
 const ABI = [
   {
@@ -293,7 +294,7 @@ export const COINS: Record<string, { decimals: number; contract: string }> = {
 export async function price(net: abi.Web3API, contract: string, decimals: number) {
   const prices = abi.contract(ABI, net, contract);
   let res = await prices.latestRoundData.call();
-  return +abi.formatDecimal(res.answer, decimals);
+  return +P.coders.decimal(decimals).encode(res.answer);
 }
 
 export async function coinPrice(net: abi.Web3API, symbol: string) {

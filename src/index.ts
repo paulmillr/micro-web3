@@ -23,18 +23,6 @@ export type Web3API = {
 };
 
 // Utils
-export function concatBytes(...arrays: Uint8Array[]): Uint8Array {
-  if (arrays.length === 1) return arrays[0];
-  const length = arrays.reduce((a, arr) => a + arr.length, 0);
-  const result = new Uint8Array(length);
-  for (let i = 0, pad = 0; i < arrays.length; i++) {
-    const arr = arrays[i];
-    result.set(arr, pad);
-    pad += arr.length;
-  }
-  return result;
-}
-
 export function add0x(hex: string) {
   return /^0x/i.test(hex) ? hex : `0x${hex}`;
 }
@@ -58,37 +46,8 @@ export function zip<A, B>(a: A[], b: B[]): [A, B][] {
   return res;
 }
 
-export function formatDecimal(n: bigint, precision: number): string {
-  let s = (n < 0n ? -n : n).toString(10);
-  let sep = s.length - precision;
-  if (sep < 0) {
-    s = s.padStart(s.length - sep, '0');
-    sep = 0;
-  }
-  let i = s.length - 1;
-  for (; i >= sep && s[i] === '0'; i--);
-  let [int, frac] = [s.slice(0, sep), s.slice(sep, i + 1)];
-  if (!int) int = '0';
-  if (n < 0n) int = '-' + int;
-  if (!frac) return int;
-  return `${int}.${frac}`;
-}
-
-export function parseDecimal(s: string, precision: number): bigint {
-  let neg = false;
-  if (s.startsWith('-')) {
-    neg = true;
-    s = s.slice(1);
-  }
-  let sep = s.indexOf('.');
-  sep = sep === -1 ? s.length : sep;
-  const [intS, fracS] = [s.slice(0, sep), s.slice(sep + 1)];
-  const int = BigInt(intS) * 10n ** BigInt(precision);
-  const fracLen = Math.min(fracS.length, precision);
-  const frac = BigInt(fracS.slice(0, fracLen)) * 10n ** BigInt(precision - fracLen);
-  const value = int + frac;
-  return neg ? -value : value;
-}
+export const PRECISION = 18;
+export const Decimal = P.coders.decimal(PRECISION);
 
 // /Utils
 
@@ -455,7 +414,7 @@ export function contract<T extends ArrLike<FnArg>>(
     const outputs = fn.outputs ? mapArgs(fn.outputs) : undefined;
     const decodeOutput = (b: Bytes) => outputs && outputs.decode(b);
     const encodeInput = (v: unknown) =>
-      concatBytes(hex.decode(sh), inputs ? inputs.encode(v as any) : new Uint8Array());
+      P.concatBytes(hex.decode(sh), inputs ? inputs.encode(v as any) : new Uint8Array());
     res[name] = { decodeOutput, encodeInput };
     if (!net) continue;
     res[name].call = async (args: unknown, overrides: Web3CallArgs = {}) => {
@@ -566,7 +525,7 @@ export function events<T extends ArrLike<FnArg>>(abi: T): ContractEventType<Writ
             else if (input.type === 'tuple' && input.components)
               parts = input.components.map((j) => (mapArgs([j]) as any).encode(value[j.name!]));
             else throw new Error('Unknown unsized type');
-            topic = hex.encode(keccak_256(concatBytes(...parts)));
+            topic = hex.encode(keccak_256(P.concatBytes(...parts)));
           }
           res.push(add0x(topic));
           ii++;

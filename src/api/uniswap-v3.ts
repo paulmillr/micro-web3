@@ -2,6 +2,7 @@ import * as abi from '../index.js';
 import * as contracts from '../contracts/index.js';
 import * as uni from './uniswap-common.js';
 import { hex } from '@scure/base';
+import * as P from 'micro-packed';
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 export const QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
@@ -74,7 +75,7 @@ function basePaths(a: string, b: string, exactOutput: boolean = false) {
           hex.decode(abi.strip0x(i))
         );
         if (exactOutput) path = path.reverse();
-        res.push({ path: abi.concatBytes(...path) });
+        res.push({ path: P.concatBytes(...path) });
       }
     }
   }
