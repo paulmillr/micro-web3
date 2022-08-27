@@ -13,7 +13,9 @@
     "contracts/*.js",
     "contracts/*.d.ts",
     "contracts/*.d.ts.map",
-    "src/*.ts"
+    "src/index.ts",
+    "src/api/*.ts",
+    "src/contracts/*.ts"
   ],
   "type": "module",
   "main": "index.js",
