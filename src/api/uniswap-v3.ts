@@ -167,7 +167,7 @@ export function txData(
   args.amountOutMinimum = uni.addPercent(args.amountOut, -opt.slippagePercent);
   const calldatas = [
     (ROUTER_CONTRACT[
-      'exact' + (amountIn ? 'Input' : 'Output') + (!args.path ? 'Single' : '')
+      'exact' + (amountIn ? 'Input' : 'Output') + (!args.path ? 'Single' : '') as 'exactInput' | 'exactOutput' | 'exactInputSingle' | 'exactOutputSingle'
     ].encodeInput as (v: unknown) => Uint8Array)(args)
   ];
   if (input == 'eth' && amountOut) calldatas.push(ROUTER_CONTRACT['refundETH'].encodeInput({}));
