@@ -166,9 +166,15 @@ export function txData(
   args.amountInMaximum = uni.addPercent(args.amountIn, opt.slippagePercent);
   args.amountOutMinimum = uni.addPercent(args.amountOut, -opt.slippagePercent);
   const calldatas = [
-    (ROUTER_CONTRACT[
-      'exact' + (amountIn ? 'Input' : 'Output') + (!args.path ? 'Single' : '') as 'exactInput' | 'exactOutput' | 'exactInputSingle' | 'exactOutputSingle'
-    ].encodeInput as (v: unknown) => Uint8Array)(args)
+    (
+      ROUTER_CONTRACT[
+        ('exact' + (amountIn ? 'Input' : 'Output') + (!args.path ? 'Single' : '')) as
+          | 'exactInput'
+          | 'exactOutput'
+          | 'exactInputSingle'
+          | 'exactOutputSingle'
+      ].encodeInput as (v: unknown) => Uint8Array
+    )(args),
   ];
   if (input == 'eth' && amountOut) calldatas.push(ROUTER_CONTRACT['refundETH'].encodeInput({}));
   // unwrap
@@ -189,7 +195,7 @@ export function txData(
     calldatas.length === 1 ? calldatas[0] : ROUTER_CONTRACT['multicall'].encodeInput(calldatas);
   const value = input === 'eth' ? (amountIn ? amountIn : args.amountInMaximum) : 0n;
   const allowance =
-    (input !== 'eth')
+    input !== 'eth'
       ? { token: input, amount: amountIn ? amountIn : args.amountInMaximum }
       : undefined;
   return { to: contracts.UNISWAP_V3_ROUTER_CONTRACT, value, data, allowance };
