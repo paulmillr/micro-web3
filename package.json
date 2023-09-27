@@ -1,6 +1,6 @@
 {
   "name": "micro-web3",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Typesafe Web3 with minimum deps: call eth contracts directly from JS. Batteries included",
   "files": [
     "index.js",
