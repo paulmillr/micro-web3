@@ -18,6 +18,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "prettier --check index.ts",
+    "format": "prettier --write index.ts",
     "test": "node test/index.js"
   },
   "author": "Paul Miller (https://paulmillr.com)",
@@ -30,10 +31,5 @@
   "keywords": [
     "web3"
   ],
-  "funding": [
-    {
-      "type": "individual",
-      "url": "https://paulmillr.com/funding/"
-    }
-  ]
+  "funding": "https://paulmillr.com/funding/"
 }
