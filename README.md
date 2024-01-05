@@ -2,6 +2,13 @@
 
 Typesafe Web3 with minimum deps: call eth contracts directly from JS. Batteries included.
 
+## Deprecated
+
+The package has been integrated into micro-eth-signer.
+Check it out: https://github.com/paulmillr/micro-eth-signer
+
+---
+
 - Connect to web3 nodes
 - Write typesafe code with auto inference of TypeScript types from ABI JSON
 - Fetch token balances, resolve ENS domains, watch token prices with chainlink web3 oracle
